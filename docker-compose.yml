@@ -1,0 +1,70 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-quintawise}
+      POSTGRES_USER: ${POSTGRES_USER:-quintawise}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quintawise}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quintawise} -d ${POSTGRES_DB:-quintawise}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://quintawise:quintawise@db:5432/quintawise}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      MIGRATIONS_DIR: /app/migrations
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+
+  ingestion:
+    build: ./workers/ingestion
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: ${POSTGRES_DB:-quintawise}
+      PGUSER: ${POSTGRES_USER:-quintawise}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-quintawise}
+      CAOP_URL: ${CAOP_URL:-}
+      SOURCE_LICENSE: ${SOURCE_LICENSE:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - dataset_cache:/data
+      - ./workers/ingestion:/app
+    profiles: ["ingestion"]
+
+volumes:
+  postgres_data:
+  dataset_cache:

@@ -1,0 +1,59 @@
+{
+  "sources": [
+    {
+      "slug": "caop-2025",
+      "authority": "DGT",
+      "type": "vector",
+      "official_page": "https://www.dgterritorio.gov.pt/atividades/cartografia/cartografia-tematica/caop",
+      "version": "CAOP2025",
+      "status": "requires_download_endpoint_resolution",
+      "download_endpoint": null,
+      "license": null,
+      "limitation": "O importador só arranca depois de CAOP_URL ser confirmado numa página oficial da DGT ou no registo SNIG."
+    },
+    {
+      "slug": "cos-2023-s2",
+      "authority": "DGT",
+      "type": "vector",
+      "official_page": "https://www.dgterritorio.gov.pt/atividades/cartografia/cartografia-tematica/SMOS-CLMS",
+      "version": "COS2023v1 Série 2",
+      "status": "requires_download_endpoint_resolution",
+      "download_endpoint": null,
+      "license": null,
+      "limitation": "As Séries 1 e 2 não são comparáveis; a nomenclatura oficial tem de ser preservada."
+    },
+    {
+      "slug": "fire-hazard-2020-2030",
+      "authority": "ICNF",
+      "type": "raster",
+      "official_page": "https://geocatalogo.icnf.pt/catalogo_tema5.html",
+      "version": "2020-2030",
+      "status": "requires_download_endpoint_resolution",
+      "download_endpoint": null,
+      "license": null,
+      "limitation": "Perigosidade estrutural cartografada; não é uma previsão de incêndio nem uma conclusão urbanística."
+    },
+    {
+      "slug": "hydro-network",
+      "authority": "APA",
+      "type": "vector",
+      "official_page": "https://sniamb.apambiente.pt/content/geo-visualizador",
+      "version": "official-current-reviewed",
+      "status": "requires_download_endpoint_resolution",
+      "download_endpoint": null,
+      "license": null,
+      "limitation": "Uma linha cartografada não prova disponibilidade, titularidade ou potabilidade da água."
+    },
+    {
+      "slug": "terrain-dtm",
+      "authority": "DGT",
+      "type": "raster-tiles",
+      "official_page": "https://www.dgterritorio.gov.pt/atividades/cartografia/cartografia-topografica/modelos-digitais",
+      "version": "LiDAR 2024-2025",
+      "status": "requires_tile-index_connector",
+      "download_endpoint": null,
+      "license": null,
+      "limitation": "A cobertura é segmentada; cada resultado deve indicar os tiles e a data efetivamente usados."
+    }
+  ]
+}
